@@ -1,0 +1,90 @@
+# 应用相关配置
+server:
+  port: 8081
+  servlet:
+    context-path: /api
+
+# 默认使用 dev profile 以便本地开箱即用；生产环境通过 SPRING_PROFILES_ACTIVE=prod 覆盖。
+# 注意：dev profile 会激活开发自动登录后门（DevAdminAutoLoginHandler），生产切勿使用 dev。
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  # 数据库相关配置（密码等敏感项用 ${ENV:默认值} 外置，生产由环境变量注入）
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:horizonhub}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,log4j
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      # Druid 监控控制台默认关闭（生产环境严禁开启）；如需本地查看由环境变量开启
+      stat-view-servlet:
+        enabled: ${DRUID_MONITOR_ENABLED:false}
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: ${DRUID_MONITOR_USERNAME:nlizzard}
+        login-password: ${DRUID_MONITOR_PASSWORD:nlizzard8023}
+  # 发送邮件相关配置
+  mail:
+    username: ${MAIL_USERNAME:xxxx@qq.com}
+    host: smtp.qq.com
+    port: 465
+    password: ${MAIL_PASSWORD:xxxx}
+    default-encoding: UTF-8
+  freemarker:
+    check-template-location: false
+  data:
+    redis:
+      host: ${REDIS_HOST:192.168.123.2}
+      port: ${REDIS_PORT:6379}
+      username: ${REDIS_USERNAME:}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+# 是否使用邮箱验证码，false，验证码打印在控制台，true，发送邮件
+send:
+  mail:
+    open: ${SEND_MAIL_OPEN:false}
+# ip地址查询接口（用于获取具体省份）
+ip:
+  address:
+    province:
+      query:
+        url: https://whois.pconline.com.cn/ipJson.jsp?json=true&ip=
+# 管理员
+admin:
+  emails: ${ADMIN_EMAILS:test111@qq.com} #前台管理员邮箱地址（多个使用，分隔）
+  # 后台登录的账号密码（生产环境务必通过环境变量 ADMIN_NAME / ADMIN_PASSWORD 注入强随机口令）
+  adminName: ${ADMIN_NAME:admin}
+  password: ${ADMIN_PASSWORD:123456}
+# 开发模式相关（仅 dev profile 下由 DevAdminAutoLoginHandler 使用，生产 profile 不生效）
+isDev:
+  open: false
+  testUserEmail: ${DEV_TEST_EMAIL:test_123456@test.com}
+# 项目根目录，用于拼接对应文件夹前缀拿到论文相关文件（附件等）存放位置
+projectFolder: ${PROJECT_FOLDER:E:/project/horizonhub}
+# Token（JWT 外壳 + Redis 登录态）配置；dev 默认密钥仅供本地，生产用 TOKEN_SECRET 注入强随机值
+token:
+  secret: ${TOKEN_SECRET:horizonhub-dev-secret-key-please-change-in-production-32bytes}
+  ttl-minutes: ${TOKEN_TTL_MINUTES:10080}
+  issuer: ${TOKEN_ISSUER:horizonhub}
+log:
+  root:
+    level: INFO

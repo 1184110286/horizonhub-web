@@ -1,0 +1,111 @@
+# 应用相关配置
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# 默认使用 dev profile 以便本地开箱即用；生产环境通过 SPRING_PROFILES_ACTIVE=prod 覆盖。
+# 注意：dev profile 会激活开发自动登录后门（DevWebAutoLoginHandler），生产切勿使用 dev。
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+  # 未配置 AI_API_KEY 时排除 Spring AI 自动配置，避免其在启动期强制校验 api-key 导致启动失败。
+  # 有 key 时设 AI_EXCLUDE 为空（或对应环境变量不排除），让 Spring AI 正常装配 ChatModel。
+  autoconfigure:
+    exclude:
+      - ${AI_EXCLUDE:org.springframework.ai.model.openai.autoconfigure.OpenAiChatAutoConfiguration}
+  # AI 助手（Spring AI，OpenAI 兼容端点；dev 默认指向 DeepSeek，可换通义/Kimi 等）
+  ai:
+    openai:
+      base-url: ${AI_BASE_URL:https://api.deepseek.com}
+      api-key: ${AI_API_KEY:}
+      chat:
+        options:
+          model: ${AI_MODEL:deepseek-chat}
+          temperature: ${AI_TEMPERATURE:0.5}
+    # AI 接口限流：防恶意刷量导致 LLM 成本失控。登录按 userId、游客按 IP，双窗口。
+    # 均带默认值，不配置时使用下方缺省额度。
+    rate-limit:
+      user: # 登录用户额度
+        per-minute: ${AI_RATE_USER_PER_MINUTE:10}
+        per-day: ${AI_RATE_USER_PER_DAY:100}
+      guest: # 游客额度（更严格）
+        per-minute: ${AI_RATE_GUEST_PER_MINUTE:5}
+        per-day: ${AI_RATE_GUEST_PER_DAY:20}
+  # 数据库相关配置（密码等敏感项用 ${ENV:默认值} 外置，生产由环境变量注入）
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:horizonhub}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall,log4j
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      # Druid 监控控制台默认关闭（生产环境严禁开启）；如需本地查看由环境变量开启
+      stat-view-servlet:
+        enabled: ${DRUID_MONITOR_ENABLED:false}
+        url-pattern: /druid/*
+        reset-enable: false
+        login-username: ${DRUID_MONITOR_USERNAME:nlizzard}
+        login-password: ${DRUID_MONITOR_PASSWORD:nlizzard8023}
+  # 发送邮件相关配置
+  mail:
+    username: ${MAIL_USERNAME:xxxx@qq.com}
+    host: smtp.qq.com
+    port: 465
+    password: ${MAIL_PASSWORD:xxxx}
+    default-encoding: UTF-8
+  freemarker:
+    check-template-location: false
+  data:
+    redis:
+      host: ${REDIS_HOST:192.168.123.2}
+      port: ${REDIS_PORT:6379}
+      username: ${REDIS_USERNAME:}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+# 是否使用邮箱验证码，false，验证码打印在控制台，true，发送邮件
+send:
+  mail:
+    open: ${SEND_MAIL_OPEN:false}
+# ip地址查询接口（用于获取具体省份）
+ip:
+  address:
+    province:
+      query:
+        url: https://whois.pconline.com.cn/ipJson.jsp?json=true&ip=
+# 管理员邮箱地址（多个使用，分隔）
+admin:
+  emails: ${ADMIN_EMAILS:test111@qq.com}
+# 开发模式相关（仅 dev profile 下由 DevWebAutoLoginHandler 使用，生产 profile 不生效）
+isDev:
+  open: false
+  testUserEmail: ${DEV_TEST_EMAIL:test_123456@test.com}
+# 项目根目录，用于拼接对应文件夹前缀拿到论文相关文件（附件等）存放位置
+projectFolder: ${PROJECT_FOLDER:E:/project/horizonhub}
+# Token（JWT 外壳 + Redis 登录态）配置；dev 默认密钥仅供本地，生产用 TOKEN_SECRET 注入强随机值
+token:
+  secret: ${TOKEN_SECRET:horizonhub-dev-secret-key-please-change-in-production-32bytes}
+  ttl-minutes: ${TOKEN_TTL_MINUTES:10080}
+  issuer: ${TOKEN_ISSUER:horizonhub}
+#内部接口相关
+log:
+  root:
+    level: INFO

@@ -1,0 +1,65 @@
+# 生产环境配置覆盖（通过 SPRING_PROFILES_ACTIVE=prod 激活）。
+# 敏感项此处不提供默认值：缺失对应环境变量时，Spring 占位符解析失败、应用直接启动失败（fail-fast），
+# 杜绝误用 dev 默认弱口令。部署时必须注入：
+#   DB_USERNAME / DB_PASSWORD / DB_HOST / DB_NAME
+#   REDIS_HOST / REDIS_PASSWORD
+#   MAIL_PASSWORD / ADMIN_EMAILS
+#   PROJECT_FOLDER
+spring:
+  # AI 助手：生产必须注入 AI_API_KEY
+  ai:
+    openai:
+      base-url: ${AI_BASE_URL}
+      api-key: ${AI_API_KEY}
+      chat:
+        options:
+          model: ${AI_MODEL}
+          temperature: ${AI_TEMPERATURE:0.5}
+    # AI 接口限流（生产建议调紧）：登录按 userId、游客按 IP，双窗口。
+    rate-limit:
+      user:
+        per-minute: ${AI_RATE_USER_PER_MINUTE:10}
+        per-day: ${AI_RATE_USER_PER_DAY:100}
+      guest:
+        per-minute: ${AI_RATE_GUEST_PER_MINUTE:5}
+        per-day: ${AI_RATE_GUEST_PER_DAY:20}
+  datasource:
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT:3306}/${DB_NAME}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    druid:
+      # 生产环境关闭 Druid 监控控制台
+      stat-view-servlet:
+        enabled: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      password: ${REDIS_PASSWORD}
+  mail:
+    password: ${MAIL_PASSWORD}
+  # Session Cookie 安全加固
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        secure: true
+        same-site: strict
+
+admin:
+  emails: ${ADMIN_EMAILS}
+
+projectFolder: ${PROJECT_FOLDER}
+
+# Token 密钥：无默认值，缺失即启动失败（fail-fast），务必通过 TOKEN_SECRET 注入强随机值
+token:
+  secret: ${TOKEN_SECRET}
+  ttl-minutes: ${TOKEN_TTL_MINUTES:10080}
+  issuer: ${TOKEN_ISSUER:horizonhub}
+
+send:
+  mail:
+    open: true
+
+log:
+  root:
+    level: WARN

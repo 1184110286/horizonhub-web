@@ -1,0 +1,53 @@
+#custom
+file/**/*
+!file/**/.gitkeep
+
+# Maven / Java build output
+**/target/
+**/target/**
+**/out/
+*.class
+
+# Logs
+*.log
+logs/
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
+
+# JetBrains IDE
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+~$*
+rebel.xml
+cp.txt
+
+# Environment / local overrides
+.env
+.env.*
+
+# 本地个人配置覆盖（含真实口令，切勿提交）
+**/application-local.yml
+**/application-local.yaml
+
+# Keep Maven wrapper and project files tracked
+!.mvn/
+!.mvn/wrapper/
+!mvnw
+!mvnw.cmd

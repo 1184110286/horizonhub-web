@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="10 minutes">
+    <!-- 控制台输出 -->
+    <appender name="stdot" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 修正：类名改为 PatternLayoutEncoder 或直接移除使用默认值 -->
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,GMT+8} [%p][%c][%M][%L]-> %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProperty scope="context" name="log.path" source="projectFolder"/>
+    <springProperty scope="context" name="log.root.level" source="log.root.level"/>
+
+    <property name="LOG_FOLDER" value="logs"/>
+    <property name="LOG_FILE_NAME" value="horizonhub-admin.log"/>
+
+    <!-- 文件输出 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/${LOG_FOLDER}/${LOG_FILE_NAME}</file>
+
+        <!-- 修正：使用推荐的 SizeAndTimeBasedRollingPolicy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 文件名模式，注意必须包含 %d 和 %i -->
+            <fileNamePattern>${log.path}/${LOG_FOLDER}/${LOG_FILE_NAME}.%d{yyyyMMdd}.%i</fileNamePattern>
+            <!-- 单个文件上限 -->
+            <maxFileSize>20MB</maxFileSize>
+            <!-- 保留 30 天 -->
+            <maxHistory>30</maxHistory>
+            <!-- 启动时清理历史 -->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+
+        <encoder>
+            <charset>utf-8</charset>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,GMT+8} [%p][%c][%M][%L]-> %m%n</pattern>
+        </encoder>
+
+        <!-- 修正：移除了 <append>false</append> 以消除 WARN -->
+        <prudent>false</prudent>
+    </appender>
+
+    <root level="${log.root.level}">
+        <appender-ref ref="stdot"/>
+        <appender-ref ref="file"/>
+    </root>
+</configuration>

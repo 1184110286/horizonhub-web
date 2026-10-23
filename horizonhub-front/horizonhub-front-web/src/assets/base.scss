@@ -1,0 +1,72 @@
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  /**/
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(239, 239, 239);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bfbfbf;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bfbfbf;
+}
+
+::-webkit-scrollbar-corner {
+  background: #bfbfbf;
+}
+
+:root {
+  --link: #0f8fd9;
+  --pink: #FF6699;
+  --text2: #61666d;
+  --icon: #9499a0;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
+  color: #223e57;
+  background:
+    radial-gradient(circle at 10% -20%, rgba(71, 170, 227, 0.2) 0%, rgba(71, 170, 227, 0) 38%),
+    radial-gradient(circle at 100% 5%, rgba(68, 212, 183, 0.15) 0%, rgba(68, 212, 183, 0) 32%),
+    linear-gradient(180deg, #f6fbff 0%, #eef5fb 46%, #e9f1f9 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.a-link {
+  text-decoration: none;
+  color: var(--link);
+  cursor: pointer;
+}
+
+.el-form-item {
+  align-items: center;
+}
+
+.container-body {
+  margin: 0px auto;
+  padding-top: 5px;
+}
+
+.tag {
+  font-size: 12px;
+  border-radius: 3px;
+  padding: 0px 5px;
+  margin-right: 5px;
+  font-weight: normal;
+}
+
+.tag-no-audit {
+  color: var(--text2);
+  border: 1px solid var(--text2);
+}

@@ -1,14 +1,14 @@
-# HorizonHub - 前后端分离论坛项目
+# VelaForum - AI 智能社区平台
 
 [![License](https://img.shields.io/badge/License-MIT%202.0-blue.svg)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.12-green.svg)](https://spring.io/projects/spring-boot)
 
-HorizonHub 是一个基于 Java 21 和 Spring Boot 3 的论坛系统，包含用户侧接口、管理侧接口、公共业务模块，以及一个基于 Spring AI 的 **AI 助手**。前端工程位于 `horizonhub-front` 目录下（web 管理台 + 用户台）。
+VelaForum 是一个基于 Java 21 和 Spring Boot 3 的论坛系统，包含用户侧接口、管理侧接口、公共业务模块，以及一个基于 Spring AI 的 **AI 助手**。前端工程位于 `horizonhub-front` 目录下（web 管理台 + 用户台）。
 
 ## 项目说明
 
-- 当前仓库：`https://github.com/nlizzard/horizonhub`
+- 项目仓库：[VelaForum GitHub 项目主页](.)
 - 前端工程已合并到当前仓库的 `horizonhub-front` 目录下，未来不再单独维护前端仓库
 - `horizonhub-web` 和 `horizonhub-admin` 是后端服务模块（用户侧 / 管理侧），`horizonhub-ai` 是 AI 助手模块（作为 library 被用户侧引入）
 
@@ -75,7 +75,7 @@ HorizonHub 是一个基于 Java 21 和 Spring Boot 3 的论坛系统，包含用
 ## 工程结构
 
 ```text
-horizonhub/
+vela-forum/
 ├── horizonhub-common/    # 公共模块：entity、service、mapper、utils、config、切面、全局异常
 ├── horizonhub-web/       # 用户侧后端 API（引入 horizonhub-ai，端点随 web 启动加载）
 ├── horizonhub-admin/     # 管理侧后端 API
@@ -99,8 +99,8 @@ horizonhub/
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/nlizzard/horizonhub.git
-cd horizonhub
+git clone https://github.com/1184110286/horizonhub-web.git vela-forum
+cd vela-forum
 ```
 
 ### 2. 创建数据库并导入脚本

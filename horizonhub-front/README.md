@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌅 HorizonHub Frontend
+# VelaForum Frontend
 
 **现代化的论坛社区前端解决方案**
 
@@ -13,7 +13,7 @@
 [快速开始](#-快速开始) •
 [项目结构](#-项目结构) •
 [技术栈](#-技术栈) •
-[后端仓库](https://github.com/nlizzard/horizonhub)
+[项目主仓库](../)
 
 </div>
 
@@ -21,7 +21,7 @@
 
 ## 📖 项目简介
 
-HorizonHub 是一个功能完善的现代化论坛社区系统，本仓库为其前端实现，采用 Vue 3 + Vite 构建，包含**用户端**和**管理端**两个独立应用。
+VelaForum 是一个功能完善的现代化论坛社区系统，本仓库为其前端实现，采用 Vue 3 + Vite 构建，包含**用户端**和**管理端**两个独立应用。
 
 - 🖥️ **用户端 (Web)** - 面向普通用户的论坛前台，支持文章浏览、发布、评论、搜索等功能
 - 🔧 **管理端 (Admin)** - 面向管理员的后台系统，支持内容管理、用户管理、系统设置等功能
@@ -57,8 +57,8 @@ HorizonHub 是一个功能完善的现代化论坛社区系统，本仓库为其
 ### 克隆仓库
 
 ```bash
-git clone https://github.com/nlizzard/horizonhub-front.git
-cd horizonhub-front
+git clone https://github.com/1184110286/horizonhub-web.git vela-forum
+cd vela-forum/horizonhub-front
 ```
 
 ### 安装依赖
@@ -193,7 +193,7 @@ horizonhub-front/
 
 ## 🔗 相关链接
 
-- 📦 **后端仓库**: [https://github.com/nlizzard/horizonhub](https://github.com/nlizzard/horizonhub)
+- 📦 **项目主仓库**：[VelaForum](../)
 
 ## 🤝 贡献指南
 
